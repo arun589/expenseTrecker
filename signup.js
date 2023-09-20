@@ -1,22 +1,24 @@
-async function signup(e){
+async function signup(event){
     try{
-        e.preventDefault();
-        const name=e.target.username;
-        const email=e.target.email;
-        const password=e.target.password;
+        event.preventDefault();
+        const username=event.target.username.value;
+        const email=event.target.email.value;
+        const password=event.target.password.value;
         const userdetail={
-            name,
+            username,
             email,
             password
         };
-        console.log(userdetail)
+        console.log(userdetail);
         let response=await axios.post("http://localhost:3000/user/signup",userdetail)
         if(response.status==201){
-            window.location.href="../login"
+           console.log(response);
         }
         else{
             throw new Error("failed to login");
         }
+       
+        
         
     }
     catch(err){
