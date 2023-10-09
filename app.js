@@ -5,9 +5,10 @@ const cors=require('cors');
 const app=express();
 app.use(bodyparser.json({extended:false}));
 const sequelize=require('./util/database');
-const signup=require("./controller/signcontroller");
+const userRoutes=require('./router/user');
 app.use(cors());
-app.post("/user/signup",signup.adduser);
+app.use(express.json());
+app.use('/user',userRoutes);
 sequelize.sync()
 .then(res=>console.log("done"))
 .catch(err=>console.log(err));
