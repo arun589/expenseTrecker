@@ -6,9 +6,11 @@ const app=express();
 app.use(bodyparser.json({extended:false}));
 const sequelize=require('./util/database');
 const userRoutes=require('./router/user');
+const expenseRoutes=require('./router/expenseRouter');
 app.use(cors());
 app.use(express.json());
 app.use('/user',userRoutes);
+app.use('/expense',expenseRoutes);
 sequelize.sync()
 .then(res=>console.log("done"))
 .catch(err=>console.log(err));

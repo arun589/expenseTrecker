@@ -9,6 +9,7 @@ async function login(event){
         console.log(logindetails);
         let login=await axios.post("http://localhost:3000/user/login",logindetails);
         alert(login.data.message);
+        window.location.href="./expense/expense.html";
     }
     catch(err){
         console.log(err);
