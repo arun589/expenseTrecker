@@ -6,7 +6,7 @@ exports.addexpense=async(req,res,next)=>{
         const description=req.body.description;
         const category=req.body.category;
         
-        const data=await expensetable.create({price,description,category});
+        const data=await expensetable.create({price,description,category,userId:req.user.id});
         res.status(201).json({newexpense:data});
 
     }
@@ -18,7 +18,7 @@ exports.addexpense=async(req,res,next)=>{
 }
 exports.getallexpense=async(req,res,next)=>{
     try{
-        const data=await expensetable.findAll();
+        const data=await expensetable.findAll({where:{userId:req.user.id}});
         res.status(201).json({allexpense:data})
     }
     catch(err){
@@ -31,11 +31,15 @@ exports.getallexpense=async(req,res,next)=>{
 }
 exports.deleteexpense=async(req,res,next)=>{
     const id=req.params.id;
-    try{
-        const data= await expensetable.findByPk(id)
-        await data.destroy();
-    }catch(err){
+        expensetable.destroy({where:{id,userId:req.user.id}})
+        .then(noofrows=>{
+            if(noofrows===0){
+                return res.status(404).json({success:false,message:"expense does not belongs to you"});
+            }
+            return res.status(200).json({success:true,message:"Deleted successfully"});
+        })
+    .catch(err=>{
         console.log(err);
         res.status(500).json({error:err})
-    }
+    })
 }

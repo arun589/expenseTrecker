@@ -1,5 +1,6 @@
 const user1=require('../model/signup');
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 function isStringValid(string){
     if(string==undefined||string.length===0)
@@ -8,6 +9,9 @@ function isStringValid(string){
     }
     return false;
 
+}
+function generateAccessToken(id){
+    return jwt.sign({userId:id},"secretKey");
 }
 exports.adduser=async(req,res,next)=>{
    try{
@@ -48,7 +52,7 @@ exports.login=async(req,res,next)=>{
                 }
                 if(result===true)
                 {
-                    res.status(200).json({success:true,message:"user logged in succesfully"})
+                    res.status(200).json({success:true,message:"user logged in succesfully",token:generateAccessToken(user[0].id)})
                 }
                 else{
                     return res.status(400).json({message:"password is incorrect",success:false})

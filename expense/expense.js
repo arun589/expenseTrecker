@@ -6,7 +6,8 @@ function save(event){
     const obj={
         price,description,category
     };
-    axios.post("http://localhost:3000/expense/addexpense",obj)
+    const token=localStorage.getItem("token");
+    axios.post("http://localhost:3000/expense/addexpense",obj,{headers:{"Authorization":token}})
     .then(res=>{
         console.log(res.data.newexpense);
         screen(res.data.newexpense);
@@ -25,7 +26,8 @@ function screen(obj){
     delbtn.onclick=()=>{
         const id=obj.id;
         console.log(id);
-        axios.delete(`http://localhost:3000/expense/deleteexpense/${id}`)
+        const token=localStorage.getItem("token");
+        axios.delete(`http://localhost:3000/expense/deleteexpense/${id}`,{headers:{"Authorization":token}})
         .then(res=>console.log(res))
         .catch(err=>console.log(err));
         parent.removeChild(child);
@@ -34,7 +36,8 @@ function screen(obj){
     parent.appendChild(child);
 }
 window.addEventListener("DOMContentLoaded",()=>{
-axios.get("http://localhost:3000/expense/get")
+    const token=localStorage.getItem("token");
+axios.get("http://localhost:3000/expense/get",{headers:{"Authorization":token}})
     .then((res)=>{
         console.log(res);
         for(let i=0;i<res.data.allexpense.length;i++){
