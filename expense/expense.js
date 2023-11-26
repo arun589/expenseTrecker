@@ -46,3 +46,34 @@ axios.get("http://localhost:3000/expense/get",{headers:{"Authorization":token}})
     })
     .catch(err=>console.log(err));
 })
+document.getElementById('razorpay').onclick=async function(e){
+    const token=localStorage.getItem('token')
+    const response=await axios.get("http://localhost:3000/purchase/premiummembership",{headers:{"Authorization":token}});
+   // alert(response.data.key_id);
+    //alert(response.razorpay_payment_id);
+    console.log(response.data);
+    alert(response.data.order.id)
+    
+   var options={
+    "key":response.data.key_id,
+    "order_id":response.data.order.id,
+    "handler": async function(response){
+        await axios.post('http://localhost:3000/purchase/updatetransactionstatus',{
+            order_id:options.order_id,
+            payment_id:response.razorpay_payment_id,
+        },{headers:{"Authorization":token}});
+
+
+        alert("you are a premium user");
+
+    },
+
+   };
+   const rzp1=new Razorpay(options);
+   rzp1.open();
+   e.preventDefault();
+   rzp1.on('payment.failed', function (response){
+    console.log(response)
+    alert('something went wrong');
+   })
+}
