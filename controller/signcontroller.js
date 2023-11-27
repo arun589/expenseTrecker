@@ -10,8 +10,8 @@ function isStringValid(string){
     return false;
 
 }
-function generateAccessToken(id){
-    return jwt.sign({userId:id},"secretKey");
+function generateAccessToken(id,name,ispremiumuser){
+    return jwt.sign({userId:id,name:name,ispremiumuser},"secretKey");
 }
 exports.adduser=async(req,res,next)=>{
    try{
@@ -44,6 +44,7 @@ exports.login=async(req,res,next)=>{
    
     try{
         const user=await user1.findAll({where:{email}})
+        console.log(user);
         
         if(user.length>0){
             bcrypt.compare(password,user[0].password,(err,result)=>{
@@ -52,7 +53,7 @@ exports.login=async(req,res,next)=>{
                 }
                 if(result===true)
                 {
-                    res.status(200).json({success:true,message:"user logged in succesfully",token:generateAccessToken(user[0].id)})
+                    res.status(200).json({success:true,message:"user logged in succesfully",token:generateAccessToken(user[0].id,user[0].name,user[0].ispremiumuser)})
                 }
                 else{
                     return res.status(400).json({message:"password is incorrect",success:false})

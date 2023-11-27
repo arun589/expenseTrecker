@@ -35,8 +35,34 @@ function screen(obj){
     child.appendChild(delbtn);
     parent.appendChild(child);
 }
+
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
+function showpremiumuser(){
+    document.getElementById('razorpay').style.visibility="hidden";
+    document.getElementById('message').innerHTML="you are premium user";
+}
+
 window.addEventListener("DOMContentLoaded",()=>{
+  
     const token=localStorage.getItem("token");
+    const decodedToken=parseJwt(token);
+    console.log(decodedToken);
+    const isadmin=decodedToken.ispremiumuser;
+    console.log(isadmin);
+    if(isadmin){
+        document.getElementById('razorpay').style.visibility="hidden";
+        document.getElementById('message').innerHTML="you are premium user";
+        showleaderboard();
+    }
 axios.get("http://localhost:3000/expense/get",{headers:{"Authorization":token}})
     .then((res)=>{
         console.log(res);
@@ -63,8 +89,11 @@ document.getElementById('razorpay').onclick=async function(e){
             payment_id:response.razorpay_payment_id,
         },{headers:{"Authorization":token}});
 
-
+        document.getElementById('razorpay').style.visibility="hidden";
+        document.getElementById('message').innerHTML="you are premium user";
+        localStorage.setItem('token',res.data.token);
         alert("you are a premium user");
+        showleaderboard();
 
     },
 
@@ -76,4 +105,21 @@ document.getElementById('razorpay').onclick=async function(e){
     console.log(response)
     alert('something went wrong');
    })
+}
+function showleaderboard(){
+    const inputelement=document.createElement("input");
+    inputelement.type="button";
+    inputelement.value="show leaderboard";
+    inputelement.onclick=async()=>{
+        //alert("12");
+        const token=localStorage.getItem("token");
+        const leaderboardArray=await axios.get("http://localhost:3000/premium/showleaderboard",{headers:{"Authorization":token}})
+        console.log(leaderboardArray);
+        var leaderboardElem=document.getElementById('leaderBoard');
+        leaderboardElem.innerHTML+='<h1>LeaderBoard</h1>'
+        leaderboardArray.data.forEach((userDetails)=>{
+            leaderboardElem.innerHTML+=`<li>Name -${userDetails.name}  Total cost ${userDetails.totalcost}`
+        });
+    }
+    document.getElementById("message").appendChild(inputelement);
 }
