@@ -10,9 +10,7 @@ function isStringValid(string){
     return false;
 
 }
-function generateAccessToken(id,name,ispremiumuser){
-    return jwt.sign({userId:id,name:name,ispremiumuser},"secretKey");
-}
+
 exports.adduser=async(req,res,next)=>{
    try{
         const name1=req.body.username;
@@ -68,4 +66,8 @@ exports.login=async(req,res,next)=>{
     catch(err){
         res.status(500).json({message:err,success:false});
     }
+}
+function generateAccessToken(id,name,ispremiumuser){
+   
+    return jwt.sign({userId:id,name:name,ispremiumuser},"secretKey");
 }

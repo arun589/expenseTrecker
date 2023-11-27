@@ -118,7 +118,7 @@ function showleaderboard(){
         var leaderboardElem=document.getElementById('leaderBoard');
         leaderboardElem.innerHTML+='<h1>LeaderBoard</h1>'
         leaderboardArray.data.forEach((userDetails)=>{
-            leaderboardElem.innerHTML+=`<li>Name -${userDetails.name}  Total cost ${userDetails.totalcost}`
+            leaderboardElem.innerHTML+=`<li>Name -${userDetails.name}  Total cost ${userDetails.totalExpenses}`
         });
     }
     document.getElementById("message").appendChild(inputelement);
