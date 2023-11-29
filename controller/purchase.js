@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const Order = require('../model/orders')
-const userController = require('./signcontroller')
+const userController = require('./signcontroller');
+require('dotenv').config();
 const purchasepremium =async (req, res) => {
     try {
         var rzp = new Razorpay({

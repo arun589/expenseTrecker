@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>forgot password Page</title>
     <style>
         body {
     font-family: Arial, sans-serif;
@@ -57,22 +57,17 @@ button:hover {
 </head>
 <body>
     <div class="login-container">
-        <h1>Login</h1>
-        <form  onsubmit="login(event)">
+        <h1>Forgot password</h1>
+        <form  onsubmit="forgotPassword(event)">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
             
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            
-            <button type="Login">Login</button>
-            <a href="./index.html">Create Account</a>
-            <a href="./forgot.html">Forgot password</a>
+            <button type="submit">submit</button>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./login.js"></script>
+    <script src="./forgot.js"></script>
 
 </body>
 </html>
